@@ -1,0 +1,12 @@
+defmodule AdventOfCode.<%= @module %>Test do
+  use ExUnit.Case, async: true
+  alias AdventOfCode.<%= @module %>, as: Solver
+
+  test "first stage" do
+    assert Solver.solve(:first)
+  end
+
+  test "second stage" do
+    assert Solver.solve(:second)
+  end
+end
