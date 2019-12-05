@@ -3,11 +3,11 @@ defmodule AdventOfCode.Y2019.Day02Test do
   alias AdventOfCode.Y2019.Day02, as: Solver
 
   test "first stage" do
-    assert Solver.solve(:first) == 3_085_697
+    assert Solver.solve_first() == 3_085_697
   end
 
   test "second stage" do
-    assert Solver.solve(:second)
+    assert Solver.solve_second()
   end
 
   test "sample program" do

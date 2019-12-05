@@ -1,24 +1,21 @@
 defmodule AdventOfCode.<%= @module %> do
-  @moduledoc "
+  use AdventOfCode.Day
+
+  @moduledoc """
   https://adventofcode.com/<%= @year %>/day/<%= @day %>
-  "
+  """
 
-  @spec solve(:first | :second, any) :: any
-  def solve(part \\ :first, input \\ nil)
-
-  def solve(part, input) when is_nil(input) do
-    solve(part, read_input())
-  end
-
-  def solve(:first, input) do
+  @spec solve_first(any) :: any
+  def solve_first(input) do
     input
   end
 
-  def solve(:second, input) do
+  @spec solve_second(any) :: any
+  def solve_second(input) do
     input
   end
 
-  defp read_input do
+  def read_input do
     File.read!("<%= @input_path %>")
   end
 end

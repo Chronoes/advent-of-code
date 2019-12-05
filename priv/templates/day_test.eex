@@ -3,10 +3,10 @@ defmodule AdventOfCode.<%= @module %>Test do
   alias AdventOfCode.<%= @module %>, as: Solver
 
   test "first stage" do
-    assert Solver.solve(:first)
+    assert Solver.solve_first()
   end
 
   test "second stage" do
-    assert Solver.solve(:second)
+    assert Solver.solve_second()
   end
 end

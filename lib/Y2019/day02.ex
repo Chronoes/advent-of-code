@@ -1,20 +1,17 @@
 defmodule AdventOfCode.Y2019.Day02 do
-  @moduledoc "
+  use AdventOfCode.Day
+
+  @moduledoc """
   https://adventofcode.com/2019/day/2
-  "
+  """
 
-  @spec solve(:first | :second, any) :: any
-  def solve(part \\ :first, input \\ nil)
-
-  def solve(part, input) when is_nil(input) do
-    solve(part, read_input())
-  end
-
-  def solve(:first, input) do
+  @spec solve_first([integer]) :: integer
+  def solve_first(input) do
     input |> List.replace_at(1, 12) |> List.replace_at(2, 2) |> read_instructions() |> hd()
   end
 
-  def solve(:second, input) do
+  @spec solve_second([integer]) :: any
+  def solve_second(input) do
     input
   end
 
@@ -53,7 +50,8 @@ defmodule AdventOfCode.Y2019.Day02 do
     List.replace_at(program, output, execute.(value1, value2))
   end
 
-  defp read_input do
+  @spec read_input :: [integer]
+  def read_input do
     File.read!("priv/inputs/Y2019/day02.txt")
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
