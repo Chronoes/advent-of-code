@@ -12,7 +12,30 @@ defmodule AdventOfCode.Y2019.Day02 do
 
   @spec solve_second([integer]) :: any
   def solve_second(input) do
-    input
+    {noun, verb} = input |> find_noun_and_verb()
+    noun * 100 + verb
+  end
+
+  def find_noun_and_verb(input) do
+    expected_output = 19_690_720
+
+    0..99
+    |> Stream.flat_map(fn a ->
+      0..99 |> Stream.map(fn b -> {a, b} end)
+    end)
+    |> Stream.drop_while(fn {noun, verb} ->
+      result =
+        input
+        |> List.replace_at(1, noun)
+        |> List.replace_at(2, verb)
+        |> read_instructions()
+        |> hd()
+
+      result != expected_output
+    end)
+    |> Stream.take(1)
+    |> Enum.to_list()
+    |> hd()
   end
 
   @spec read_instructions([integer]) :: [integer]

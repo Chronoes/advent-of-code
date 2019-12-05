@@ -7,7 +7,11 @@ defmodule AdventOfCode.Y2019.Day02Test do
   end
 
   test "second stage" do
-    assert Solver.solve_second()
+    assert Solver.solve_second() == 9425
+  end
+
+  test "noun and verb in second stage" do
+    assert Solver.find_noun_and_verb(Solver.read_input()) == {94, 25}
   end
 
   test "sample program" do
