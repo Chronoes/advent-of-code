@@ -2,6 +2,22 @@ defmodule Mix.Tasks.GenDay do
   use Mix.Task
 
   @shortdoc "Generate a day boilerplate"
+  @moduledoc """
+  Basic usage generates day boilerplate for "current" year and day.
+  ```
+  mix gen_day
+  ```
+  "Current" year can be this or last year depending on current month according to UTC.
+  E.g. if UTC date is 2020-04-13, `mix gen_day` will generate Day 13 for Year 2019
+
+  If generating for different days, specify day and year
+  ```
+  # day 6 and current year
+  mix gen_day 6
+  # day and year
+  mix gen_day 10 2017
+  ```
+  """
 
   @template "priv/templates/day.eex"
   @test_template "priv/templates/day_test.eex"
@@ -9,13 +25,21 @@ defmodule Mix.Tasks.GenDay do
   @output "lib/"
   @test_folder "test/"
 
-  def run([day]), do: run([day, to_string(Date.utc_today().year)])
+  def run([day]) do
+    year = to_string(get_current_year())
+    create_file(day, year)
+  end
+
   def run([day, year]), do: create_file(day, year)
 
   def run(_args) do
     today = Date.utc_today()
-    run([to_string(today.day), to_string(today.year)])
+    run([to_string(today.day), to_string(get_current_year(today))])
   end
+
+  defp get_current_year(%{year: year, month: month}) when month != 12, do: year - 1
+  defp get_current_year(%{year: year}), do: year
+  defp get_current_year(), do: get_current_year(Date.utc_today())
 
   defp create_file(day, year) do
     padded_day = String.pad_leading(day, 2, "0")
