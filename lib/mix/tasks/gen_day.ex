@@ -26,7 +26,7 @@ defmodule Mix.Tasks.GenDay do
   @test_folder "test/"
 
   def run([day]) do
-    year = to_string(get_current_year())
+    year = to_string(AdventOfCode.get_current_year())
     create_file(day, year)
   end
 
@@ -34,12 +34,8 @@ defmodule Mix.Tasks.GenDay do
 
   def run(_args) do
     today = Date.utc_today()
-    run([to_string(today.day), to_string(get_current_year(today))])
+    run([to_string(today.day), to_string(AdventOfCode.get_current_year(today))])
   end
-
-  defp get_current_year(%{year: year, month: month}) when month != 12, do: year - 1
-  defp get_current_year(%{year: year}), do: year
-  defp get_current_year(), do: get_current_year(Date.utc_today())
 
   defp create_file(day, year) do
     padded_day = String.pad_leading(day, 2, "0")

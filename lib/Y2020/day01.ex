@@ -13,6 +13,7 @@ defmodule AdventOfCode.Y2020.Day01 do
     |> Enum.sort()
   end
 
+  @impl true
   @spec solve_first(any) :: any
   def solve_first(input) do
     {first, second} =
@@ -70,6 +71,7 @@ defmodule AdventOfCode.Y2020.Day01 do
 
   defp find_triplet(_head, []), do: nil
 
+  @impl true
   @spec solve_second(any) :: any
   def solve_second(input) do
     {first, second, third} =
@@ -79,6 +81,7 @@ defmodule AdventOfCode.Y2020.Day01 do
     first * second * third
   end
 
+  @impl true
   def read_input do
     File.read!("priv/inputs/Y2020/day01.txt")
   end

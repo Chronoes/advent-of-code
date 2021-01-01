@@ -3,16 +3,7 @@ defmodule AdventOfCode do
   Documentation for AdventOfCode.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> AdventOfCode.hello
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  def get_current_year(%{year: year, month: month}) when month != 12, do: year - 1
+  def get_current_year(%{year: year}), do: year
+  def get_current_year(), do: get_current_year(Date.utc_today())
 end

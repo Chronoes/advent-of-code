@@ -5,16 +5,19 @@ defmodule AdventOfCode.<%= @module %> do
   https://adventofcode.com/<%= @year %>/day/<%= @day %>
   """
 
+  @impl true
   @spec solve_first(any) :: any
   def solve_first(input) do
     input
   end
 
+  @impl true
   @spec solve_second(any) :: any
   def solve_second(input) do
     input
   end
 
+  @impl true
   def read_input do
     File.read!("<%= @input_path %>")
   end
