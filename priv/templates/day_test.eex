@@ -11,17 +11,17 @@ defmodule AdventOfCode.<%= @module %>Test do
   end
 
   # Remove :skip tag when answer found
-  @tag skip: true
+  @tag :skip
   test "first stage" do
     assert Solver.solve_first()
   end
 
-  @tag skip: true
+  @tag :skip
   test "second stage sample" do
     assert Solver.solve_second(@sample_input) == true
   end
 
-  @tag skip: true
+  @tag :skip
   test "second stage" do
     assert Solver.solve_second()
   end
