@@ -5,16 +5,23 @@ defmodule AdventOfCode.<%= @module %> do
   https://adventofcode.com/<%= @year %>/day/<%= @day %>
   """
 
+  @spec prep_input(any) :: any
+  def prep_input(input) do
+    input
+    |> String.trim()
+    |> String.split("\n")
+  end
+
   @impl true
   @spec solve_first(any) :: any
   def solve_first(input) do
-    input
+    prep_input(input)
   end
 
   @impl true
   @spec solve_second(any) :: any
   def solve_second(input) do
-    input
+    prep_input(input)
   end
 
   @impl true

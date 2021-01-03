@@ -7,22 +7,22 @@ defmodule AdventOfCode.<%= @module %>Test do
 
   test "first stage sample" do
     # TODO: Solve first sample
-    assert Solver.solve_first(@sample_input) == true
+    assert Solver.solve_first(@sample_input) === true
   end
 
   # Remove :skip tag when answer found
   @tag :skip
   test "first stage" do
-    assert Solver.solve_first()
+    assert Solver.solve_first() === true
   end
 
   @tag :skip
   test "second stage sample" do
-    assert Solver.solve_second(@sample_input) == true
+    assert Solver.solve_second(@sample_input) === true
   end
 
   @tag :skip
   test "second stage" do
-    assert Solver.solve_second()
+    assert Solver.solve_second() === true
   end
 end
