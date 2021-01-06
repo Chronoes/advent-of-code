@@ -4,7 +4,7 @@ defmodule AdventOfCode.Mixfile do
   def project do
     [
       app: :advent_of_code,
-      version: "2021.1.3",
+      version: "2021.1.6",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       deps: deps()
