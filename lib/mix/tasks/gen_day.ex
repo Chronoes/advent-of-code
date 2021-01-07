@@ -23,8 +23,8 @@ defmodule Mix.Tasks.GenDay do
 
   @template "priv/templates/day.eex"
   @test_template "priv/templates/day_test.eex"
-  @output "lib/"
-  @test_folder "test/"
+  @output "lib/advent_of_code/"
+  @test_folder "test/advent_of_code/"
 
   def run([day]) do
     year = to_string(AdventOfCode.get_current_year())
