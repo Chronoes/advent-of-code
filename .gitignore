@@ -21,3 +21,6 @@ erl_crash.dump
 
 # Ignore language server artifacts
 /.elixir_ls
+
+# Ignore secret configs
+/config/*.secret.exs

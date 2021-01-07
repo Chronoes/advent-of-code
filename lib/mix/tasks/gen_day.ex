@@ -1,6 +1,8 @@
 defmodule Mix.Tasks.GenDay do
   use Mix.Task
 
+  alias Mix.Shell.IO, as: MixIO
+
   @shortdoc "Generate a day boilerplate"
   @moduledoc """
   Basic usage generates day boilerplate for "current" year and day.
@@ -21,7 +23,6 @@ defmodule Mix.Tasks.GenDay do
 
   @template "priv/templates/day.eex"
   @test_template "priv/templates/day_test.eex"
-  @inputs_folder "priv/inputs"
   @output "lib/"
   @test_folder "test/"
 
@@ -41,16 +42,10 @@ defmodule Mix.Tasks.GenDay do
     padded_day = String.pad_leading(day, 2, "0")
     year_name = "Y#{year}"
 
-    input_path =
-      @inputs_folder
-      |> Path.join(year_name)
-      |> Path.join("day" <> padded_day <> ".txt")
-
     assigns = [
       day: day,
       year: year,
-      module: "#{year_name}.Day#{padded_day}",
-      input_path: input_path
+      module: "#{year_name}.Day#{padded_day}"
     ]
 
     # Create main solving file
@@ -65,7 +60,15 @@ defmodule Mix.Tasks.GenDay do
     |> Path.join("day" <> padded_day <> "_test.exs")
     |> Mix.Generator.create_file(EEx.eval_file(@test_template, assigns: assigns))
 
-    # Create empty input file
-    Mix.Generator.create_file(input_path, "")
+    # Create empty input file if session does not exist
+    if is_nil(Application.get_env(:advent_of_code_helper, :session)) do
+      MixIO.info(
+        "Creating empty input file because :session is not set in :advent_of_code_helper config"
+      )
+
+      Application.get_env(:advent_of_code_helper, :cache_dir)
+      |> Path.join("input_#{year}_#{day}")
+      |> Mix.Generator.create_file("")
+    end
   end
 end

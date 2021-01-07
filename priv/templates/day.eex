@@ -8,7 +8,6 @@ defmodule AdventOfCode.<%= @module %> do
   @spec prep_input(any) :: any
   def prep_input(input) do
     input
-    |> String.trim()
     |> String.split("\n")
   end
 
@@ -26,6 +25,7 @@ defmodule AdventOfCode.<%= @module %> do
 
   @impl true
   def read_input do
-    File.read!("<%= @input_path %>")
+    {:ok, content} = AdventOfCodeHelper.get_input(<%= @year %>, <%= @day %>)
+    String.trim(content)
   end
 end
