@@ -17,6 +17,7 @@ defmodule AdventOfCode.Y2020.Day14Test do
     assert Solver.solve_first() === 7_440_382_076_205
   end
 
+  @tag :skip
   test "second stage sample" do
     assert Solver.solve_second(@sample_input) === 208
   end
