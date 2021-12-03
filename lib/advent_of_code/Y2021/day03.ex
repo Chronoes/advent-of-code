@@ -64,9 +64,40 @@ defmodule AdventOfCode.Y2021.Day03 do
   @spec solve_second(any) :: any
   def solve_second(input) do
     numbers = prep_input(input)
-
     one_bits = find_one_bit_counts(numbers)
-    Enum.filter(numbers, fn nr -> nr end)
+
+    oxygen_rating =
+      find_matching_numbers({hd(one_bits), 0}, numbers, fn c, ones, decider ->
+        if ones >= decider do
+          c == ?1
+        else
+          c == ?0
+        end
+      end)
+      |> List.to_integer(2)
+
+    co2_rating =
+      find_matching_numbers({hd(one_bits), 0}, numbers, fn c, ones, decider ->
+        if ones >= decider do
+          c == ?0
+        else
+          c == ?1
+        end
+      end)
+      |> List.to_integer(2)
+
+    oxygen_rating * co2_rating
+  end
+
+  def find_matching_numbers({ones, idx}, nrs, matches?) do
+    remaining_nrs = Enum.filter(nrs, &matches?.(Enum.at(&1, idx), ones, length(nrs) / 2))
+
+    if length(remaining_nrs) == 1 do
+      hd(remaining_nrs)
+    else
+      new_ones_count = find_one_bit_counts(remaining_nrs) |> Enum.at(idx + 1)
+      find_matching_numbers({new_ones_count, idx + 1}, remaining_nrs, matches?)
+    end
   end
 
   @impl true
