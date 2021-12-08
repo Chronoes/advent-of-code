@@ -7,7 +7,8 @@ defmodule AdventOfCode.Mixfile do
       version: "2021.12.3",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: ["aoc.test_day": :test]
     ]
   end
 
