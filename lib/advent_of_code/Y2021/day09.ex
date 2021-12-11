@@ -1,6 +1,8 @@
 defmodule AdventOfCode.Y2021.Day09 do
   use AdventOfCode.Day
 
+  alias AdventOfCode.TwoDeeList
+
   @moduledoc """
   https://adventofcode.com/2021/day/9
   """
@@ -21,6 +23,7 @@ defmodule AdventOfCode.Y2021.Day09 do
   @spec solve_first(any) :: any
   def solve_first(input) do
     prep_input(input)
+    |> TwoDeeList.add_coords()
     |> find_lowest_points()
     |> Enum.map(fn {height, _coords} ->
       height + 1
@@ -30,32 +33,11 @@ defmodule AdventOfCode.Y2021.Day09 do
 
   def find_lowest_points(heightmap) do
     heightmap
-    |> Enum.with_index()
-    |> Enum.flat_map(fn {row, y} ->
-      row
-      |> Enum.with_index()
-      |> Enum.map(fn {height, x} -> {height, {x, y}} end)
-      |> Enum.filter(fn {height, coords} ->
-        find_adjacent(coords, heightmap)
+    |> Enum.flat_map(fn row ->
+      Enum.filter(row, fn {height, coords} ->
+        TwoDeeList.find_directly_adjacent(coords, heightmap)
         |> is_lowest_point?(height)
       end)
-    end)
-  end
-
-  def find_adjacent({x, y}, heightmap) do
-    min_x = max(x - 1, 0)
-    max_x = min(x + 1, length(hd(heightmap)) - 1)
-
-    min_y = max(y - 1, 0)
-    max_y = min(y + 1, length(heightmap) - 1)
-
-    min_y..max_y
-    |> Enum.flat_map(fn q ->
-      row = Enum.at(heightmap, q)
-
-      min_x..max_x
-      |> Enum.reject(fn p -> p == x and q == y end)
-      |> Enum.map(fn p -> {Enum.at(row, p), {p, q}} end)
     end)
   end
 
@@ -66,7 +48,7 @@ defmodule AdventOfCode.Y2021.Day09 do
   @impl true
   @spec solve_second(any) :: any
   def solve_second(input) do
-    heightmap = prep_input(input)
+    heightmap = prep_input(input) |> TwoDeeList.add_coords()
 
     heightmap
     |> find_lowest_points()
@@ -82,7 +64,7 @@ defmodule AdventOfCode.Y2021.Day09 do
 
   def find_basins({height, coords}, heightmap) do
     basin =
-      find_adjacent(coords, heightmap)
+      TwoDeeList.find_directly_adjacent(coords, heightmap)
       |> Enum.filter(fn {adj, _adj_coords} -> adj < 9 and adj - height === 1 end)
       |> Enum.flat_map(fn adj_point ->
         find_basins(adj_point, heightmap)
