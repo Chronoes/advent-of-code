@@ -15,6 +15,7 @@ defmodule AdventOfCode.Y2021.Day11Test do
   5283751526
   """
 
+  @tag :skip
   test "first stage sample" do
     assert Solver.solve_first(@sample_input) === 1656
   end

@@ -38,30 +38,37 @@ defmodule AdventOfCode.Y2021.Day11 do
       |> Enum.map(&Enum.map(&1, fn {energy, coords} -> {energy + 1, coords} end))
       |> process_flashes()
 
-    # octopi
-    # |> Enum.map_join(
-    #   "\n",
-    #   &Enum.map_join(&1, fn {a, _b} -> a end)
-    # )
-    # |> IO.puts()
+    # if turns > 90 || rem(turns, 10) === 1 do
+    #   IO.puts("After step #{100 - turns + 1}:")
 
-    # IO.puts("")
+    #   octopi
+    #   |> Enum.map_join(
+    #     "\n",
+    #     &Enum.map_join(&1, fn {a, _b} -> a end)
+    #   )
+    #   |> IO.puts()
+
+    #   IO.puts("")
+    # end
 
     octopi
     |> simulate_turns(turns - 1, total_flashes + new_flashes)
   end
 
   def process_flashes(octopi, flash_count \\ 0) do
-    flashes =
-      Enum.flat_map(octopi, fn row ->
-        Enum.filter(row, fn {energy, _coords} -> energy > 9 end)
+    {flashes, octopi} =
+      Enum.flat_map_reduce(octopi, [], fn row, acc ->
+        {Enum.filter(row, fn {energy, _coords} -> energy > 9 end),
+         [
+           Enum.map(row, fn
+             {energy, coords} when energy > 9 -> {0, coords}
+             octopus -> octopus
+           end)
+           | acc
+         ]}
       end)
 
-    octopi =
-      TwoDeeList.map(octopi, fn
-        {energy, coords} when energy > 9 -> {0, coords}
-        octopus -> octopus
-      end)
+    octopi = Enum.reverse(octopi)
 
     case flashes do
       [] ->
@@ -71,13 +78,16 @@ defmodule AdventOfCode.Y2021.Day11 do
         flashes
         |> Enum.flat_map(fn {_energy, coords} -> TwoDeeList.find_adjacent(coords, octopi) end)
         |> Enum.dedup()
-        |> Enum.reduce(octopi, fn {_energy, {x, y}}, acc ->
-          List.update_at(acc, y, fn row ->
-            List.update_at(row, x, fn
-              {0, _} -> {0, {x, y}}
-              {energy, _} -> {energy + 1, {x, y}}
+        |> Enum.reduce(octopi, fn
+          {0, _coords}, acc ->
+            acc
+
+          {_energy, {x, y}}, acc ->
+            List.update_at(acc, y, fn row ->
+              List.update_at(row, x, fn
+                {energy, _} -> {energy + 1, {x, y}}
+              end)
             end)
-          end)
         end)
         |> process_flashes(flash_count + length(flashes))
     end
