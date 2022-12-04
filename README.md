@@ -2,6 +2,14 @@
 
 [Advent of code](https://adventofcode.com)
 
+Add the file config/config.secret.exs with the contents:
+```elixir
+import Config
+
+config :advent_of_code_helper,
+  session: "<session key>" # Session cookie value from AoC website after you log in
+```
+
 To generate new day, run `mix help aoc.gen_day` to get information on how to operate it.
 
 Results of input can be seen using custom script
