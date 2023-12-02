@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Y2018.Day03 do
   @input "289326"
 
-  @rotations [{-1, 0}, {0, -1}, {1, 0}, {0, 1}]
+  # @rotations [{-1, 0}, {0, -1}, {1, 0}, {0, 1}]
 
   def solve(part, input \\ @input)
 
