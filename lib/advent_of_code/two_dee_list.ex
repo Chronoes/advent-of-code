@@ -10,19 +10,25 @@ defmodule AdventOfCode.TwoDeeList do
     end)
   end
 
-  @spec find_adjacent(point :: point(), list :: t()) :: [list_elem()]
-  def find_adjacent({x, y}, list) do
+  @spec get_adjacent_coords(point :: point(), list :: t()) :: {Range.t(), Range.t()}
+  def get_adjacent_coords({x, y}, list) do
     min_x = max(x - 1, 0)
     max_x = min(x + 1, length(hd(list)) - 1)
 
     min_y = max(y - 1, 0)
     max_y = min(y + 1, length(list) - 1)
+    {min_x..max_x, min_y..max_y}
+  end
 
-    min_y..max_y
+  @spec find_adjacent(point :: point(), list :: t()) :: [list_elem()]
+  def find_adjacent({x, y}, list) do
+    {x_range, y_range} = get_adjacent_coords({x, y}, list)
+
+    y_range
     |> Enum.flat_map(fn q ->
       row = Enum.at(list, q)
 
-      min_x..max_x
+      x_range
       |> Enum.reject(fn p -> p == x and q == y end)
       |> Enum.map(fn p -> Enum.at(row, p) end)
     end)
@@ -34,8 +40,8 @@ defmodule AdventOfCode.TwoDeeList do
     |> Enum.reject(fn {_, {p, q}} -> p !== x and (y - 1 === q || y + 1 === q) end)
   end
 
-  @spec map([[any]], (any -> any)) :: [[any]]
+  @spec map([[any]], (any, [[any]] -> any)) :: [[any]]
   def map(list, fun) do
-    Enum.map(list, fn row -> Enum.map(row, &fun.(&1)) end)
+    Enum.map(list, fn row -> Enum.map(row, &fun.(&1, list)) end)
   end
 end

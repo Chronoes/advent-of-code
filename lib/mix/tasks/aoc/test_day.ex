@@ -22,8 +22,9 @@ defmodule Mix.Tasks.Aoc.TestDay do
 
   @impl Mix.Task
   def run(args) do
+    {option_args, args} = Enum.split_with(args, fn arg -> String.starts_with?(arg, "-") end)
     {day, year} = Mix.Tasks.Aoc.GenDay.get_day_and_year(args)
-    run_tests(day, year)
+    run_tests(day, year, option_args)
   end
 
   @spec test_folder :: binary()
@@ -34,7 +35,7 @@ defmodule Mix.Tasks.Aoc.TestDay do
     Path.join([test_folder(), year, "day#{day}_test.exs"])
   end
 
-  defp run_tests(day, year) do
-    Mix.Task.run("test", [test_filename(day, year)])
+  defp run_tests(day, year, option_args) do
+    Mix.Task.run("test", option_args ++ [test_filename(day, year)])
   end
 end

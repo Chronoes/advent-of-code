@@ -53,7 +53,7 @@ defmodule AdventOfCode.Y2022.Day08 do
       prep_input(input)
       |> AdventOfCode.TwoDeeList.add_coords()
 
-    AdventOfCode.TwoDeeList.map(trees, &calculate_score(&1, trees))
+    AdventOfCode.TwoDeeList.map(trees, &calculate_score/2)
     |> Enum.map(&Enum.max/1)
     |> Enum.max()
   end
