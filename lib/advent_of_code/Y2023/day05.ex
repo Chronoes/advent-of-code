@@ -38,16 +38,18 @@ defmodule AdventOfCode.Y2023.Day05 do
 
     seeds
     |> Enum.map(fn seed ->
-      Enum.reduce(seed_maps, seed, fn map, final_nr ->
-        case Enum.find(map, fn [_dst, src, range] ->
-               final_nr >= src and final_nr < src + range
-             end) do
-          nil -> final_nr
-          [dst, src, _range] -> final_nr - src + dst
-        end
-      end)
+      Enum.reduce(seed_maps, seed, &find_match/2)
     end)
     |> Enum.min()
+  end
+
+  defp find_match(map, final_nr) do
+    case Enum.find(map, fn [_dst, src, range] ->
+           final_nr >= src and final_nr < src + range
+         end) do
+      nil -> final_nr
+      [dst, src, _range] -> final_nr - src + dst
+    end
   end
 
   @impl true
@@ -55,18 +57,20 @@ defmodule AdventOfCode.Y2023.Day05 do
   def solve_second(input) do
     {seeds, seed_maps} = prep_input(input)
 
-    # not finished
     seeds
     |> Enum.chunk_every(2)
     |> Enum.map(fn [seed, seed_range] ->
-      Enum.reduce(seed_maps, seed, fn map, final_nr ->
-        case Enum.find(map, fn [_dst, src, range] ->
-               final_nr >= src and final_nr < src + range
-             end) do
-          nil -> final_nr
-          [dst, src, _range] -> final_nr - src + dst
-        end
+      seed..(seed + seed_range)
+      |> Stream.chunk_every(100_000)
+      |> Task.async_stream(fn range ->
+        range
+        |> Enum.map(fn seed ->
+          Enum.reduce(seed_maps, seed, &find_match/2)
+        end)
+        |> Enum.min()
       end)
+      |> Enum.min_by(&elem(&1, 1))
+      |> elem(1)
     end)
     |> Enum.min()
   end

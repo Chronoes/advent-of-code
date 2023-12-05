@@ -46,13 +46,13 @@ defmodule AdventOfCode.Y2023.Day05Test do
     assert Solver.solve_first() === 214_922_730
   end
 
-  @tag :skip
   test "second stage sample" do
     assert Solver.solve_second(@sample_input) === 46
   end
 
+  # Keeping skip because it uses bruteforce and takes at least 9min to run on Ryzen 7 5800X
   @tag :skip
   test "second stage" do
-    assert Solver.solve_second() === true
+    assert Solver.solve_second() === 148_041_808
   end
 end
