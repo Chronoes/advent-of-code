@@ -51,8 +51,7 @@ defmodule AdventOfCode.Y2023.Day08Test do
     assert Solver.solve_second(@sample_input3) === 6
   end
 
-  @tag :skip
   test "second stage" do
-    assert Solver.solve_second() === true
+    assert Solver.solve_second() === 11_283_670_395_017
   end
 end

@@ -34,79 +34,43 @@ defmodule AdventOfCode.Y2023.Day08 do
     simulate_movement(instructions, nodes)
   end
 
+  defp get_next_instruction(instructions, step) do
+    instructions |> Enum.at(rem(step, length(instructions)))
+  end
+
   def simulate_movement(instructions, nodes),
-    do: simulate_movement(instructions, instructions, nodes, {"AAA", 0})
+    do: simulate_movement(instructions, nodes, {"AAA", 0}, false)
 
-  defp simulate_movement(_instructions, _full_instructions, _nodes, {"ZZZ", step}), do: step
-
-  defp simulate_movement(instructions, full_instructions, nodes, {active_node, step}) do
-    [inst | tail] = instructions
-
+  defp simulate_movement(instructions, nodes, {active_node, step}, ends_with_z) do
     elem_index =
-      case inst do
+      case get_next_instruction(instructions, step) do
         ?L -> 0
         ?R -> 1
       end
 
-    simulate_movement(
-      if(tail == [], do: full_instructions, else: tail),
-      full_instructions,
-      nodes,
-      {elem(nodes[active_node], elem_index), step + 1}
-    )
+    new_node = elem(nodes[active_node], elem_index)
+
+    if new_node === "ZZZ" or (ends_with_z and String.ends_with?(new_node, "Z")) do
+      step + 1
+    else
+      simulate_movement(
+        instructions,
+        nodes,
+        {new_node, step + 1},
+        ends_with_z
+      )
+    end
   end
 
   @impl true
   @spec solve_second(any) :: any
   def solve_second(input) do
     {instructions, nodes} = prep_input(input)
-    simulate_simultaneous_movement(instructions, nodes)
-  end
 
-  defp simulate_simultaneous_movement(instructions, nodes),
-    do:
-      simulate_simultaneous_movement(
-        instructions,
-        instructions,
-        {nodes,
-         Map.keys(nodes)
-         |> Enum.filter(fn node -> String.ends_with?(node, "Z") end)
-         |> MapSet.new()},
-        {Map.keys(nodes)
-         |> Enum.filter(fn node -> String.ends_with?(node, "A") end), 0}
-      )
-
-  defp simulate_simultaneous_movement(
-         instructions,
-         full_instructions,
-         {nodes, end_nodes},
-         {active_nodes, step}
-       ) do
-    if rem(step, 1000) == 0 do
-      IO.puts("#{active_nodes} Step #{step}")
-    end
-
-    if Enum.all?(active_nodes, &MapSet.member?(end_nodes, &1)) do
-      step
-    else
-      [inst | tail] = instructions
-
-      elem_index =
-        case inst do
-          ?L -> 0
-          ?R -> 1
-        end
-
-      simulate_simultaneous_movement(
-        if(tail == [], do: full_instructions, else: tail),
-        full_instructions,
-        {nodes, end_nodes},
-        {
-          Enum.map(active_nodes, fn active_node -> elem(nodes[active_node], elem_index) end),
-          step + 1
-        }
-      )
-    end
+    Map.keys(nodes)
+    |> Enum.filter(fn node -> String.ends_with?(node, "A") end)
+    |> Enum.map(fn node -> simulate_movement(instructions, nodes, {node, 0}, true) end)
+    |> Enum.reduce(&Math.lcm/2)
   end
 
   @impl true
