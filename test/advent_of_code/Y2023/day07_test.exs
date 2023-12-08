@@ -19,13 +19,11 @@ defmodule AdventOfCode.Y2023.Day07Test do
     assert Solver.solve_first() === 252_295_678
   end
 
-  @tag :skip
   test "second stage sample" do
-    assert Solver.solve_second(@sample_input) === true
+    assert Solver.solve_second(@sample_input) === 5905
   end
 
-  @tag :skip
   test "second stage" do
-    assert Solver.solve_second() === true
+    assert Solver.solve_second() === 250_577_259
   end
 end
